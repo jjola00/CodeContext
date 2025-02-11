@@ -1,0 +1,20 @@
+2025-02-11 19:11:07,572 - INFO - [92mHello World.[0m
+2025-02-11 19:11:07,572 - INFO - Hello Worldagain
+INFO:__main__:[92m[92mHello World.[0m[0m
+INFO:__main__:[92mHello Worldagain[0m
+INFO:__main__:[92mHello World.[0m
+INFO:__main__:[92mHello World again[0m
+INFO:__main__:[92mValue of VAR1: Default Value 1[0m
+INFO:__main__:[92mValue of VAR2: Default Value 2[0m
+INFO:__main__:[92mHello World.[0m
+INFO:__main__:[92mHello World again[0m
+INFO:__main__:[92mCPU Usage: 15.8%[0m
+INFO:__main__:[92mRAM Usage: 74.3%[0m
+INFO:__main__:[92mHello World.[0m
+INFO:__main__:[92mHello World again[0m
+INFO:__main__:[92mCPU Usage: 5.1%[0m
+INFO:__main__:[92mRAM Usage: 74.3%[0m
+INFO:__main__:[92mHello World.[0m
+INFO:__main__:[92mHello World again[0m
+INFO:__main__:[92mCPU Usage: 9.6%[0m
+INFO:__main__:[92mRAM Usage: 73.9%[0m
