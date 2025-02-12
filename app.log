@@ -22,3 +22,11 @@ INFO:__main__:[92mHello World.[0m
 INFO:__main__:[92mHello World again[0m
 INFO:__main__:[92mCPU Usage: 25.5%[0m
 INFO:__main__:[92mRAM Usage: 70.7%[0m
+INFO:__main__:[92mHello World.[0m
+INFO:__main__:[92mHello World again[0m
+INFO:__main__:[92mCPU Usage: 17.7%[0m
+INFO:__main__:[92mRAM Usage: 69.8%[0m
+INFO:__main__:Hello World.
+INFO:__main__:Hello World again
+INFO:__main__:Serialized Metrics: {"timestamp":"2025-02-11T20:10:10.592768","cpu_usage":15.5,"ram_usage":70.8}
+INFO:__main__:Deserialized Data - CPU Usage: 15.5%, RAM Usage: 70.8%
