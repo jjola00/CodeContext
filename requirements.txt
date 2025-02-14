@@ -7,3 +7,5 @@ psutil
 time
 ctypes
 gunicorn
+requests
+threading
