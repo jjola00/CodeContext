@@ -3,20 +3,16 @@ import logging
 from utils.timer import BlockTimer
 from utils.data_snapshot import get_cached_metrics
 
-# Setup logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
-# Initialize Flask app
 app = Flask(__name__)
 
-# Simple /hello route
 @app.route("/hello")
 def hello():
     logger.info("Received request for /hello")
     return jsonify({"message": "Hello World!"})
 
-# Updated /metrics route with caching, spin-wait, and debug logs
 @app.route("/metrics")
 def metrics():
     with BlockTimer():
