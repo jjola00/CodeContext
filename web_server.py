@@ -1,11 +1,10 @@
 from flask import Flask, jsonify
 import logging
-import time
 from utils.timer import BlockTimer
 from utils.data_snapshot import get_cached_metrics
 
 # Setup logging
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # Initialize Flask app
@@ -17,14 +16,13 @@ def hello():
     logger.info("Received request for /hello")
     return jsonify({"message": "Hello World!"})
 
-# Updated /metrics route with caching & delays
+# Updated /metrics route with caching, spin-wait, and debug logs
 @app.route("/metrics")
 def metrics():
     with BlockTimer():
-        time.sleep(5)  # Simulate slow response (>5s)
         snapshot, response_time = get_cached_metrics()
 
-    logger.info("Metrics data retrieved")
+    logger.info(f"Metrics retrieved at {response_time}, read at {snapshot.timestamp}")
     return jsonify({
         "read_timestamp": snapshot.timestamp.isoformat(),
         "response_timestamp": response_time.isoformat(),
