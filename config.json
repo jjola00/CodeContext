@@ -1,7 +1,0 @@
-{
-    "app": {
-        "greeting": "Hello World",
-        "repeat_greeting": true,
-        "default_number": 1
-    }
-} 
