@@ -19,25 +19,22 @@ def upload_metrics(metrics: dict):
     if not device_name or cpu_usage is None or ram_usage is None:
         raise HTTPException(status_code=400, detail="Missing required fields: device_name, cpu_usage, ram_usage")
 
-    device_response = db_client.table("devices").select("*").eq("name", device_name).execute()
-    if not device_response.data:
-        device_response = db_client.table("devices").insert({"name": device_name}).execute()
+    device_response = db_client.table("devices").select("id").eq("name", device_name).execute()
+    if device_response.data:
         device_id = device_response.data[0]["id"]
     else:
+        device_response = db_client.table("devices").insert({"name": device_name}).execute()
         device_id = device_response.data[0]["id"]
 
-    cpu_metric_response = db_client.table("metrics").select("*").eq("name", "cpu_usage").execute()
-    ram_metric_response = db_client.table("metrics").select("*").eq("name", "ram_usage").execute()
+    metric_ids = db_client.table("metrics").select("id, name").in_("name", ["cpu_usage", "ram_usage"]).execute()
+    metric_map = {m["name"]: m["id"] for m in metric_ids.data}
 
-    if not cpu_metric_response.data or not ram_metric_response.data:
+    if "cpu_usage" not in metric_map or "ram_usage" not in metric_map:
         raise HTTPException(status_code=500, detail="Metrics (cpu_usage, ram_usage) not found in database")
 
-    cpu_metric_id = cpu_metric_response.data[0]["id"]
-    ram_metric_id = ram_metric_response.data[0]["id"]
-
     db_client.table("device_metrics").insert([
-        {"device_id": device_id, "metric_id": cpu_metric_id, "value": cpu_usage},
-        {"device_id": device_id, "metric_id": ram_metric_id, "value": ram_usage},
+        {"device_id": device_id, "metric_id": metric_map["cpu_usage"], "value": cpu_usage},
+        {"device_id": device_id, "metric_id": metric_map["ram_usage"], "value": ram_usage},
     ]).execute()
 
     return {"message": "Metrics stored successfully"}

@@ -1,10 +1,28 @@
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+//api.js
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 export const fetchMetrics = async () => {
-  const response = await fetch(`${API_BASE_URL}/metrics`);
-  return response.json();
+  try {
+    const response = await fetch(`${API_BASE_URL}/metrics`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Failed to fetch metrics:", error);
+    throw error;
+  }
 };
 
 export const sendAction = async (action) => {
-  await fetch(`${API_BASE_URL}/${action}`, { method: "POST" });
+  try {
+    const response = await fetch(`${API_BASE_URL}/${action}`, { method: "POST" });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Failed to send action:", error);
+    throw error;
+  }
 };
