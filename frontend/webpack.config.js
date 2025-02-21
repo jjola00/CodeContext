@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
   entry: "./src/index.js",
@@ -10,7 +11,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/, // Match both .js and .jsx files
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
@@ -25,6 +26,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
+    new Dotenv(), // Add this line to load environment variables
   ],
   devServer: {
     static: path.join(__dirname, "public"),
@@ -32,6 +34,6 @@ module.exports = {
     port: 8080,
   },
   resolve: {
-    extensions: [".js", ".jsx"], // Allow importing .js and .jsx files without extensions
+    extensions: [".js", ".jsx"],
   },
 };
