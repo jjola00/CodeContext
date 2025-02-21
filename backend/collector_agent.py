@@ -2,10 +2,16 @@ import psutil
 import requests
 import os
 from time import sleep
+from dotenv import load_dotenv
+
+load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 AGGREGATOR_API = os.getenv("AGGREGATOR_API")
+
+if not AGGREGATOR_API:
+    raise ValueError("AGGREGATOR_API is not set")
 
 
 def collect_metrics():

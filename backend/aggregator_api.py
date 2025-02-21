@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 import supabase
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 SUPABASE_URL = os.getenv("SUPABASE_URL")
