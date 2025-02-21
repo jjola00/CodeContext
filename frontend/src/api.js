@@ -13,16 +13,3 @@ export const fetchMetrics = async () => {
     throw error;
   }
 };
-
-export const sendAction = async (action) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/${action}`, { method: "POST" });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return response.json();
-  } catch (error) {
-    console.error("Failed to send action:", error);
-    throw error;
-  }
-};
