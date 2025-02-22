@@ -53,6 +53,8 @@ def get_metrics():
     try:
         response = db_client.table("device_metrics") \
             .select("value, timestamp, devices(name), metrics(name, unit)") \
+            .order("timestamp", desc=True) \
+            .limit(20) \
             .execute()
 
         if not response.data:
@@ -71,3 +73,9 @@ def get_metrics():
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving metrics: {e}")
+    
+@app.post("/start-collector")
+def start_collector():
+    import subprocess
+    subprocess.Popen(["python", "collector_agent.py"])
+    return {"message": "Collector agent started"}

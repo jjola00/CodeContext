@@ -22,7 +22,13 @@ const MetricsTable = ({ metrics }) => {
               <td style={styles.td}>{metric.value}</td>
               <td style={styles.td}>{metric.unit}</td>
               <td style={styles.td}>
-                {new Date(metric.timestamp).toLocaleString()}
+                {new Date(metric.timestamp).toLocaleString([], {
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
               </td>
             </tr>
           ))}
