@@ -1,6 +1,4 @@
 // frontend/src/components/MetricsTable.js
-import React from "react";
-
 const MetricsTable = ({ metrics }) => {
   return (
     <div>

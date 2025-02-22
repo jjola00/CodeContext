@@ -1,6 +1,4 @@
 // frontend/src/components/Dashboard.js
-import React from "react";
-
 const Dashboard = ({ metrics }) => {
   return (
     <div>

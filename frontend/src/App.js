@@ -1,5 +1,4 @@
 // frontend/src/App.js
-import React, { useEffect, useState } from "react";
 import { fetchMetrics } from "./api";
 import Dashboard from "./components/Dashboard";
 import MetricsTable from "./components/MetricsTable";
