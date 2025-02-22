@@ -28,13 +28,22 @@ const App = () => {
     }
   };
 
-  // Function to add a new live metric (and limit to 5 entries)
-  const addLiveMetric = (metric) => {
-    setLiveMetrics((prevMetrics) => {
-      const newMetrics = [metric, ...prevMetrics]; // Add new metric to the beginning
-      return newMetrics.slice(0, 5); // Keep only the latest 5 metrics
-    });
-  };
+  // Poll for new metrics when the collector is running
+  useEffect(() => {
+    let interval;
+    if (isCollectorRunning) {
+      // Poll for new metrics every 5 seconds
+      interval = setInterval(async () => {
+        const data = await fetchMetrics();
+        setLiveMetrics((prevMetrics) => {
+          const newMetrics = [...data, ...prevMetrics]; // Add new metrics to the beginning
+          return newMetrics.slice(0, 5); // Keep only the latest 5 metrics
+        });
+      }, 5000);
+    }
+
+    return () => clearInterval(interval); // Cleanup on unmount or when collector stops
+  }, [isCollectorRunning]);
 
   return (
     <div style={styles.app}>
