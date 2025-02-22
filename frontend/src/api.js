@@ -23,3 +23,16 @@ export const startCollector = async () => {
     throw error;
   }
 };
+
+export const stopCollector = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/stop-collector`, {
+      method: "POST",
+    });
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to stop collector:", error);
+    throw error;
+  }
+};

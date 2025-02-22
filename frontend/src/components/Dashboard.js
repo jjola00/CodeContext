@@ -13,7 +13,13 @@ const Dashboard = ({ metrics }) => {
             </p>
             <p style={styles.metricDevice}>{metric.device_name}</p>
             <p style={styles.metricTimestamp}>
-              {new Date(metric.timestamp).toLocaleString()}
+              {new Date(metric.timestamp).toLocaleString([], {
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </p>
           </div>
         ))}

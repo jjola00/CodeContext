@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+import subprocess
 import supabase
 import os
 from dotenv import load_dotenv
@@ -18,6 +19,7 @@ app.add_middleware(
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 db_client = supabase.create_client(SUPABASE_URL, SUPABASE_KEY)
+aggregator_process = None
 
 @app.post("/upload")
 def upload_metrics(metrics: dict):
@@ -76,6 +78,16 @@ def get_metrics():
     
 @app.post("/start-collector")
 def start_collector():
-    import subprocess
-    subprocess.Popen(["python", "collector_agent.py"])
+    global aggregator_process
+    aggregator_process = subprocess.Popen(["python", "collector_agent.py"])
     return {"message": "Collector agent started"}
+
+@app.post("/stop-collector")
+def stop_collector():
+    global aggregator_process
+    if aggregator_process:
+        aggregator_process.terminate()
+        aggregator_process = None
+        return {"message": "Collector agent stopped"}
+    else:
+        raise HTTPException(status_code=400, detail="Collector agent is not running")

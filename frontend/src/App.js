@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { fetchMetrics, startCollector } from "./api";
+import { fetchMetrics, startCollector, stopCollector } from "./api";
 import Dashboard from "./components/Dashboard";
 import MetricsTable from "./components/MetricsTable";
 import Navbar from "./components/Navbar";
 
 const App = () => {
   const [metricsHistory, setMetricsHistory] = useState([]); // For metrics history
-  const [liveMetrics, setLiveMetrics] = useState([]); // For live metrics (max 5 entries)
+  const [liveMetrics, setLiveMetrics] = useState([]); // For live metrics (max 6 entries)
   const [isCollectorRunning, setIsCollectorRunning] = useState(false); // Track collector status
 
   // Fetch metrics history on component mount
@@ -18,13 +18,18 @@ const App = () => {
     loadMetricsHistory();
   }, []);
 
-  // Function to start the collector agent
-  const handleStartCollector = async () => {
+  // Function to toggle the collector on/off
+  const handleToggleCollector = async () => {
     try {
-      await startCollector(); // Call the backend to start the collector
-      setIsCollectorRunning(true);
+      if (isCollectorRunning) {
+        await stopCollector(); // Stop the collector
+        setLiveMetrics([]); // Clear live metrics
+      } else {
+        await startCollector(); // Start the collector
+      }
+      setIsCollectorRunning((prev) => !prev); // Toggle the running state
     } catch (error) {
-      console.error("Failed to start collector:", error);
+      console.error("Failed to toggle collector:", error);
     }
   };
 
@@ -36,8 +41,8 @@ const App = () => {
       interval = setInterval(async () => {
         const data = await fetchMetrics();
         setLiveMetrics((prevMetrics) => {
-          const newMetrics = [...data, ...prevMetrics]; // Add new metrics to the beginning
-          return newMetrics.slice(0, 5); // Keep only the latest 5 metrics
+          const newMetrics = [data[0], ...prevMetrics]; // Add the latest metric to the beginning
+          return newMetrics.slice(0, 6); // Keep only the latest 6 metrics
         });
       }, 5000);
     }
@@ -50,12 +55,8 @@ const App = () => {
       <Navbar />
       <div style={styles.content}>
         <MetricsTable metrics={metricsHistory} />
-        <button
-          onClick={handleStartCollector}
-          disabled={isCollectorRunning}
-          style={styles.button}
-        >
-          {isCollectorRunning ? "Collector Running..." : "Start Collector"}
+        <button onClick={handleToggleCollector} style={styles.button}>
+          {isCollectorRunning ? "Stop Viewing" : "View Live Metrics"}
         </button>
         {isCollectorRunning && <Dashboard metrics={liveMetrics} />}
       </div>
