@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 import supabase
 import os
 from dotenv import load_dotenv
@@ -6,6 +7,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8080"], 
+    allow_credentials=True,
+    allow_methods=["*"], 
+    allow_headers=["*"], 
+)
+
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 db_client = supabase.create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -38,3 +47,27 @@ def upload_metrics(metrics: dict):
     ]).execute()
 
     return {"message": "Metrics stored successfully"}
+
+@app.get("/metrics")
+def get_metrics():
+    try:
+        response = db_client.table("device_metrics") \
+            .select("value, timestamp, devices(name), metrics(name, unit)") \
+            .execute()
+
+        if not response.data:
+            raise HTTPException(status_code=404, detail="No metrics found")
+
+        return [
+            {
+                "device_name": row["devices"]["name"],
+                "metric_name": row["metrics"]["name"],
+                "value": row["value"],
+                "unit": row["metrics"]["unit"],
+                "timestamp": row["timestamp"]
+            }
+            for row in response.data
+        ]
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving metrics: {e}")
