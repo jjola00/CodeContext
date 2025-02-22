@@ -1,7 +1,7 @@
 import psutil
 import requests
 import os
-from time import sleep
+import time
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -24,10 +24,16 @@ def collect_metrics():
 
 def send_metrics():
     while True:
-        metrics = collect_metrics()
-        response = requests.post(f"{AGGREGATOR_API}/upload", json=metrics)
-        print("Metrics Sent:", response.status_code)
-        sleep(5)
+        try:
+            metrics = collect_metrics()
+            response = requests.post(f"{AGGREGATOR_API}/upload", json=metrics, timeout=5)
+            if response.status_code == 200:
+                print("Metrics Sent Successfully")
+            else:
+                print(f"Failed to send metrics: {response.status_code}")
+        except requests.exceptions.RequestException as e:
+            print(f"Error sending metrics: {e}")
+        time.sleep(5)
 
 if __name__ == "__main__":
     send_metrics()

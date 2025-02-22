@@ -8,19 +8,21 @@ const MetricsTable = ({ metrics }) => {
       <table>
         <thead>
           <tr>
-            <th>Device ID</th>
-            <th>CPU Usage</th>
-            <th>Memory Usage</th>
+            <th>Device</th>
+            <th>Metric</th>
+            <th>Value</th>
+            <th>Unit</th>
             <th>Timestamp</th>
           </tr>
         </thead>
         <tbody>
           {metrics.map((metric, index) => (
             <tr key={index}>
-              <td>{metric.device_id}</td>
-              <td>{metric.cpu_usage}%</td>
-              <td>{metric.memory_usage}%</td>
-              <td>{metric.timestamp}</td>
+              <td>{metric.device_name}</td>
+              <td>{metric.metric_name}</td>
+              <td>{metric.value}</td>
+              <td>{metric.unit}</td>
+              <td>{new Date(metric.timestamp).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>
@@ -28,5 +30,6 @@ const MetricsTable = ({ metrics }) => {
     </div>
   );
 };
+
 
 export default MetricsTable;
