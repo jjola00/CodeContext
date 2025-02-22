@@ -27,7 +27,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./public/index.html",
     }),
-    new Dotenv(), // Add this line to load environment variables
+    new Dotenv(),
   ],
   devServer: {
     static: path.join(__dirname, "public"),
