@@ -5,11 +5,10 @@ import MetricsTable from "./components/MetricsTable";
 import Navbar from "./components/Navbar";
 
 const App = () => {
-  const [metricsHistory, setMetricsHistory] = useState([]); // For metrics history
-  const [liveMetrics, setLiveMetrics] = useState([]); // For live metrics (max 6 entries)
-  const [isCollectorRunning, setIsCollectorRunning] = useState(false); // Track collector status
+  const [metricsHistory, setMetricsHistory] = useState([]);
+  const [liveMetrics, setLiveMetrics] = useState([]); 
+  const [isCollectorRunning, setIsCollectorRunning] = useState(false); 
 
-  // Fetch metrics history on component mount
   useEffect(() => {
     const loadMetricsHistory = async () => {
       const data = await fetchMetrics();
@@ -18,38 +17,35 @@ const App = () => {
     loadMetricsHistory();
   }, []);
 
-  // Function to toggle the collector on/off
   const handleToggleCollector = async () => {
     try {
       if (isCollectorRunning) {
-        await stopCollector(); // Stop the collector
-        setLiveMetrics([]); // Clear live metrics
+        await stopCollector(); 
+        setLiveMetrics([]); 
       } else {
-        await startCollector(); // Start the collector
+        await startCollector();
       }
-      setIsCollectorRunning((prev) => !prev); // Toggle the running state
+      setIsCollectorRunning((prev) => !prev);
     } catch (error) {
       console.error("Failed to toggle collector:", error);
     }
   };
 
-  // Poll for new metrics when the collector is running
   useEffect(() => {
     let interval;
     if (isCollectorRunning) {
-      // Poll for new metrics every 5 seconds
       interval = setInterval(async () => {
         const data = await fetchMetrics();
         setLiveMetrics((prevMetrics) => {
-          const newMetrics = [data[0], ...prevMetrics]; // Add the latest metric to the beginning
-          return newMetrics.slice(0, 6); // Keep only the latest 6 metrics
+          const newMetrics = [data[0], ...prevMetrics]; 
+          return newMetrics.slice(0, 6); 
         });
       }, 5000);
     }
 
-    return () => clearInterval(interval); // Cleanup on unmount or when collector stops
+    return () => clearInterval(interval); 
   }, [isCollectorRunning]);
-
+                                                                                                      0
   return (
     <div style={styles.app}>
       <Navbar />
