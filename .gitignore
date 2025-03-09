@@ -1,17 +1,31 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# venv
+venv/
+env/
+.venv/
+
+# misc
 .env
-.env.local
-.env.development
-.env.production
+secrets.env
+*.env
 
-node_modules/
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 
-.next/
+# directories
+build/
 dist/
-out/
+*.egg-info/
 
-npm-debug.log
-yarn-debug.log
-yarn-error.log
-.DS_Store
+# logging
+*.log
 
-*.cache
+# local dev files
+local_settings.py
