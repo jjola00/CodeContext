@@ -1,4 +1,4 @@
-from database.supabase_client import db_client
+from database.db_connection import db_client
 from datetime import datetime
 
 def store_metrics(metrics: dict):

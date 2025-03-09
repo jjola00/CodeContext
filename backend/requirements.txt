@@ -1,6 +1,4 @@
 fastapi
 uvicorn
+database
 supabase
-psutil
-requests
-python-dotenv
